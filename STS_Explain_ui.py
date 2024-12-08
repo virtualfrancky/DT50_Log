@@ -12,12 +12,13 @@ import time
 
 
 class Ui_Frame(object):
-    
-    def line():
-        line_STS = str(self.Line_Input.text()) # input('Copy the Line\n')
-        return line_STS
-    
-    
+
+    def line(self):
+        line_STS = str(self.Line_Input.text())  # input('Copy the Line\n')
+        # return line_STS
+        values = self.STS_Split(line_STS)
+        self.STS_Explanation(*values)
+
     def STS_Split(self, line_STS):
         line_STS_list = []
         line_STS = line_STS[:-8]
@@ -25,8 +26,9 @@ class Ui_Frame(object):
         line_STS_2 = line_STS_1.replace('FULL', '')
         line_STS_3 = line_STS_2.replace('!STS', '')
         line_STS_list = line_STS_3.split()
-        Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0
-        Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS = [line_STS_list[i] for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)]
+        Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS = [
+            line_STS_list[i] for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)]
         Device = Device[0:2]
         Device = int(Device)
         Basket_Detection = int(Basket_Detection)
@@ -40,26 +42,24 @@ class Ui_Frame(object):
         Run_Time = int(Run_Time)
         Cell_STS = int(Cell_STS)
         Client_STS = int(Client_STS)
-        #print(line_STS_list)
+        # print(line_STS_list)
         return Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS
-        
-        
-    
+
     def STS_Explanation(self, Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS):
         Device_out = ''
         Time_out = 0
-        #Time
+        # Time
         print(Time)
         Time_out == Time
-        #Device
+        # Device
         if Device == 1:
             Device_out == 'Master'
-            print ('Master')
+            print('Master')
         else:
             Device_out == 'Client'
-            print ('Client')
+            print('Client')
         self.Device.setText(str(Device_out))
-        #Basket_Detection
+        # Basket_Detection
         if Basket_Detection == 0:
             print('No Basket connected')
         elif Basket_Detection == 1:
@@ -70,29 +70,29 @@ class Ui_Frame(object):
             print('Incompatible Basket Firmware')
         else:
             print('Incompatible Mounting Firmware')
-        #Beaker_Detection
+        # Beaker_Detection
         if Beaker_Detection == 1:
             print('Beaker detected')
         else:
             print('Beaker not detected')
-        #Temperature
+        # Temperature
         print('Temperature is:', Temperature)
-        #Heater Status
+        # Heater Status
         if Heater_STS == 1:
             print('heater is ON')
         else:
             print('Heater is OFF')
-        #Temperate Status
+        # Temperate Status
         if Temperate_STS == 1:
             print('System is temperated')
         else:
             print('System is not temperated yet')
-        #Error Detection
+        # Error Detection
         if Error_Detection == 0:
             print('No error detected')
         else:
             print('Error detected')
-        #System Status
+        # System Status
         if System_STS == 0:
             print('System is idled')
         elif System_STS == 1:
@@ -109,9 +109,10 @@ class Ui_Frame(object):
             print('Test is in hold')
         elif System_STS == 7:
             print('Test move out of hold')
-        #run time
-        print('Run time is', Run_Time, 's or', time.strftime("%H h %M min %S s", time.gmtime(Run_Time)))
-        #Cell Status
+        # run time
+        print('Run time is', Run_Time, 's or', time.strftime(
+            "%H h %M min %S s", time.gmtime(Run_Time)))
+        # Cell Status
         bin_val_list = []
         if Basket_Detection == 1:
             bin_val = bin(Cell_STS)
@@ -120,7 +121,8 @@ class Ui_Frame(object):
             bin_val = format(bin_val, '018')
             # analyze by cell
             # create a new list with result for each cell
-            cell_1, cell_2, cell_3, cell_4, cell_5, cell_6 = [bin_val[j] for j in (0, 1, 2, 3, 4, 5)]
+            cell_1, cell_2, cell_3, cell_4, cell_5, cell_6 = [
+                bin_val[j] for j in (0, 1, 2, 3, 4, 5)]
             # cell triggered time
             print('\n')
             print('Information Cell 1:')
@@ -169,7 +171,7 @@ class Ui_Frame(object):
             elif cell_6 == '010':
                 print('Manual Detection')
             else:
-                print('Automatic Detection')        
+                print('Automatic Detection')
         else:
             bin_val = bin(Cell_STS)
             bin_val = bin_val[2:]
@@ -206,11 +208,9 @@ class Ui_Frame(object):
             print('Manual Detection')
         else:
             print('Automatic Detection')
-        print('\n')    
+        print('\n')
         return Device_out, Time_out
-    
 
-    
     def setupUi(self, Frame):
         Frame.setObjectName("Frame")
         Frame.resize(1653, 306)
@@ -298,21 +298,25 @@ class Ui_Frame(object):
         self.lineEdit_Device.setFont(font)
         self.lineEdit_Device.setObjectName("lineEdit_Device")
         self.lineEdit_Basket_Detection = QtWidgets.QLineEdit(parent=Frame)
-        self.lineEdit_Basket_Detection.setGeometry(QtCore.QRect(180, 200, 161, 51))
+        self.lineEdit_Basket_Detection.setGeometry(
+            QtCore.QRect(180, 200, 161, 51))
         font = QtGui.QFont()
         font.setPointSize(16)
         font.setBold(True)
         font.setWeight(75)
         self.lineEdit_Basket_Detection.setFont(font)
-        self.lineEdit_Basket_Detection.setObjectName("lineEdit_Basket_Detection")
+        self.lineEdit_Basket_Detection.setObjectName(
+            "lineEdit_Basket_Detection")
         self.lineEdit_Beaker_Detection = QtWidgets.QLineEdit(parent=Frame)
-        self.lineEdit_Beaker_Detection.setGeometry(QtCore.QRect(440, 200, 71, 51))
+        self.lineEdit_Beaker_Detection.setGeometry(
+            QtCore.QRect(440, 200, 71, 51))
         font = QtGui.QFont()
         font.setPointSize(16)
         font.setBold(True)
         font.setWeight(75)
         self.lineEdit_Beaker_Detection.setFont(font)
-        self.lineEdit_Beaker_Detection.setObjectName("lineEdit_Beaker_Detection")
+        self.lineEdit_Beaker_Detection.setObjectName(
+            "lineEdit_Beaker_Detection")
         self.lineEdit_Temperature = QtWidgets.QLineEdit(parent=Frame)
         self.lineEdit_Temperature.setGeometry(QtCore.QRect(650, 200, 101, 51))
         font = QtGui.QFont()
@@ -346,7 +350,8 @@ class Ui_Frame(object):
         self.lineEdit_Error.setFont(font)
         self.lineEdit_Error.setObjectName("lineEdit_Error")
         self.lineEdit_System_Status = QtWidgets.QLineEdit(parent=Frame)
-        self.lineEdit_System_Status.setGeometry(QtCore.QRect(1300, 200, 141, 51))
+        self.lineEdit_System_Status.setGeometry(
+            QtCore.QRect(1300, 200, 141, 51))
         font = QtGui.QFont()
         font.setPointSize(16)
         font.setBold(True)
@@ -377,7 +382,8 @@ class Ui_Frame(object):
     def retranslateUi(self, Frame):
         _translate = QtCore.QCoreApplication.translate
         Frame.setWindowTitle(_translate("Frame", "Frame"))
-        self.Titre.setText(_translate("Frame", "Enter the log line to analyze"))
+        self.Titre.setText(_translate(
+            "Frame", "Enter the log line to analyze"))
         self.Device.setText(_translate("Frame", "Device"))
         self.BasketDetection.setText(_translate("Frame", "Basket Detection"))
         self.BeakerDetection.setText(_translate("Frame", "Beaker Detection"))
@@ -399,13 +405,15 @@ if __name__ == "__main__":
     Frame.show()
     sys.exit(app.exec())
 
+
 def main():
     line_STS()
-    Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS = STS_Split(self, line_STS)
-    STS_Explanation(self, Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS)
-    
+    Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS = STS_Split(
+        self, line_STS)
+    STS_Explanation(self, Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat,
+                    Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS)
 
 
-#line_STS = line()
-#Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS = STS_Split(line_STS)
-#STS_Explanation(Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS) 
+# line_STS = line()
+# Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS = STS_Split(line_STS)
+# STS_Explanation(Time, Device, Basket_Detection, Beaker_Detection, Temperature, Temp_Stat, Heater_STS, Temperate_STS, Error_Detection, System_STS, Run_Time, Cell_STS, Client_STS)
